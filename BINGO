@@ -1,0 +1,143 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+public class BINGO {
+	void display(int a[][][] , int n)
+	{
+		for(int i=0 ; i<n ; i++)
+		{
+			System.out.println("User "+(i+1)+" matrix");
+			for(int j=0 ; j<5 ; j++)
+			{
+				for(int k=0 ; k<5 ; k++)
+				{
+					if(a[i][j][k]<10)
+						System.out.print(a[i][j][k]+"  ");
+					else
+					     System.out.print(a[i][j][k]+" ");
+				}
+				System.out.println();
+			}
+			System.out.println("\n");
+		}
+	}
+
+	public static void main(String[] args)throws InterruptedException {
+		Scanner in =  new Scanner(System.in);
+		BINGO ob = new BINGO();
+		Random rand = new Random();
+		
+		System.out.println("_________WELCOME________");
+		System.out.println("BINGO      BINGO    BINGO"); Thread.sleep(1000); 
+		System.out.println("BINGO      BINGO    BINGO"); Thread.sleep(1000); 
+		System.out.println("BINGO      BINGO    BINGO\n"); Thread.sleep(500); 
+		System.out.println("RULES : ");
+		System.out.println(" n users can play this game at a given instance");Thread.sleep(500);
+		System.out.println(" Each has a matrix of size 5*5 ");Thread.sleep(500);
+		System.out.println(" Every user assign nos from 1-25 inclusive in the matrix in there desired order");Thread.sleep(500);
+		System.out.println(" While entering user should keep in mind not to repeat any no ");Thread.sleep(500);
+		System.out.println(" After this system will give them a no and it will be cut off from there matrix ");Thread.sleep(500);
+		System.out.println(" Player who gets 5 rows/column/diagonals cut will win the game ");Thread.sleep(500);
+		System.out.println(" Nos will be inputed in the manner given below");Thread.sleep(500);
+		System.out.println("1  2  3  4  5  \n6  7  8  9  10 \n11 12 13 14 15 \n16 17 18 19 20 \n21 22 23 24 25 ");Thread.sleep(2000);
+		
+		System.out.println("Enter no of players who want to play");
+		int n = in.nextInt();
+		int a[][][] = new int[n][5][5];
+		for(int i=0 ; i<n ; i++)
+		{
+			System.out.println("user "+(i+1)+" enter your nos according to above mention rules ");
+			int f[] = new int[26];
+			
+			for(int j=0 ; j<5 ; j++)
+			{
+				for(int k=0 ; k<5 ; k++)
+				{ 
+					int x;
+	
+					do
+					{
+					 x = in.nextInt();
+					 if(x<1||x>25) System.out.println("No not in range");
+					 else if(f[x]>0) System.out.println("No already present ");
+					}while((x<1||x>25)||f[x]>0);
+					
+					a[i][j][k]=x;
+					f[x]++;
+				}
+			}
+		}
+		ob.display(a, n);
+		int c=25;
+		int f[] = new int[26];
+		int ctr=0;
+		while(c-->0&&ctr==0)
+		{
+			int win[] = new int[n];
+			int cut ;
+			do
+			{
+				 cut =rand.nextInt(26);
+			}while(cut==0||f[cut]>0);
+			System.out.println("No. for "+(25-c)+" round is : ");
+			Thread.sleep(1000);
+			System.out.println(cut);
+			System.out.println();
+			Thread.sleep(1000);
+			f[cut]++;
+			for(int i=0 ; i<n ; i++)
+				for(int j=0 ; j<5 ; j++)
+					for(int k=0 ; k<5 ; k++)
+						if(a[i][j][k]==cut)
+							a[i][j][k]=0;
+			
+			ob.display(a, n);
+					
+			for(int i=0 ; i<n ; i++)
+			{
+				for(int j=0 ; j<5 ; j++)
+				{
+					int flag=0,d=0;
+					for(int k=0 ; k<5 ; k++)
+					{ 
+						if(a[i][j][k]==0)
+							flag++;
+					}
+					if(flag==5)
+						win[i]++;
+					flag=0;
+					for(int k=0 ; k<5 ; k++)
+					{ 
+						if(a[i][k][j]==0)
+							flag++;
+					}
+					if(flag==5)
+						win[i]++;
+					for(int k=0 ; k<5 ; k++)
+					{ 
+						if(j==k&&a[i][j][k]==0)
+							d++;
+						if(j+k==4&&a[i][j][k]==0)
+							d++;
+					}
+					win[i]+=d/5;
+				}
+			}
+			for(int i=0 ; i<n ; i++)
+			{
+				if(win[i]==5)
+					{
+					System.out.println("Winner "+(i+1));
+					ctr++;
+					}
+			}
+			long millis = 2500;
+			Thread.sleep(millis);
+		}
+		System.out.println("total winner "+ctr);
+		
+		
+
+	}
+
+}
